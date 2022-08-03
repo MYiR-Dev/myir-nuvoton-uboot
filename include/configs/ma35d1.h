@@ -140,6 +140,7 @@
 	"bootfile=Image\0" \
 	"kernel_addr_r=0x80080000\0" \
 	"fdt_addr_r=0x85000000\0" \
+	"bmp_addr_r=0x8D200000\0" \
 	"loadaddr=0x81000000\0" \
 	"scriptaddr=0x85010000\0" \
 	"pxefile_addr_r=0x85020000\0" \

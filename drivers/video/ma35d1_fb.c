@@ -276,6 +276,7 @@ static int ma35d1_fb_video_probe(struct udevice *dev)
 	}
 
 	/* Use DT timing (resolution) in internal info struct */
+	plat->base = CONFIG_MA35D1_DCU_ADDR;
 	disp_info.fb_base = plat->base;
 	disp_info.x_res = timings.hactive.typ;
 	disp_info.x_fp = timings.hfront_porch.typ;

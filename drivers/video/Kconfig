@@ -488,7 +488,7 @@ config MA35D1_LCD
 config MA35D1_DCU_ADDR
 	hex "MA35D1 DCU framebuffer address"
 	depends on MA35D1_LCD
-	default 0x8C800000
+	default 0x0
 	help
 	   According to reserved-memory@display_buf
 

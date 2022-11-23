@@ -348,6 +348,14 @@
 			drive-strength = <1>; /* 0 ~ 7 */
 		};
 
+		pcfg_emac_3_3V: pcfg-pcfg_emac_3_3V {
+			slew-rate = <0>; /* 0:normal, 1:high */
+			input-schmitt-enable;  /* input-schmitt-disable, input-schmitt-enable */
+			bias-disable; /* bias-disable, bias-pull-up, bias-pull-down  */
+			power-source = <3300>; /* 1800:1.8v , 3300:3.3v */
+			drive-strength = <1>; /* 0 ~ 7 */
+		};
+
 		nand {
 			pinctrl_nand: nandgrp{
 				nuvoton,pins =
@@ -442,6 +450,20 @@
 				<SYS_GPF_MFPH_PF11MFP_RGMII1_TXCLK &pcfg_emac_1_8V>,
 				<SYS_GPF_MFPH_PF12MFP_RGMII1_TXD2  &pcfg_emac_1_8V>,
 				<SYS_GPF_MFPH_PF13MFP_RGMII1_TXD3  &pcfg_emac_1_8V>;
+			};
+
+			pinctrl_emac1: emac1grp{
+				nuvoton,pins =
+				<SYS_GPF_MFPL_PF0MFP_RMII1_MDC		&pcfg_emac_3_3V>,
+				<SYS_GPF_MFPL_PF1MFP_RMII1_MDIO		&pcfg_emac_3_3V>,
+				<SYS_GPF_MFPL_PF2MFP_RMII1_TXEN		&pcfg_emac_3_3V>,
+				<SYS_GPF_MFPL_PF3MFP_RMII1_TXD0		&pcfg_emac_3_3V>,
+				<SYS_GPF_MFPL_PF4MFP_RMII1_TXD1		&pcfg_emac_3_3V>,
+				<SYS_GPF_MFPL_PF5MFP_RMII1_REFCLK	&pcfg_emac_3_3V>,
+				<SYS_GPF_MFPL_PF6MFP_RMII1_CRSDV	&pcfg_emac_3_3V>,
+				<SYS_GPF_MFPL_PF7MFP_RMII1_RXD0		&pcfg_emac_3_3V>,
+				<SYS_GPF_MFPH_PF8MFP_RMII1_RXD1		&pcfg_emac_3_3V>,
+				<SYS_GPF_MFPH_PF9MFP_RMII1_RXERR	&pcfg_emac_3_3V>;
 			};
 		};
 

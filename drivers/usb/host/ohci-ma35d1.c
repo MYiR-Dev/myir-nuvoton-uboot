@@ -72,7 +72,6 @@ static int ohci_ma35d1_probe(struct udevice *dev)
 static const struct udevice_id ohci_ma35d1_ids[] = {
 	{ .compatible = "nuvoton,ma35d1-ohci0" },
 	{ .compatible = "nuvoton,ma35d1-ohci1" },
-	{ .compatible = "nuvoton,ma35d1-ohci2" },
 	{ }
 };
 

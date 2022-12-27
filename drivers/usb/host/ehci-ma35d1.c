@@ -76,6 +76,7 @@ static int ehci_ma35d1_probe(struct udevice *dev)
 	}
 
 	/* USBPMISCR; HSUSBH0 & HSUSBH1 PHY */
+	regmap_write(ma35d1_ehci->sysreg, REG_SYS_USBPMISCR, 0x10001);
 	regmap_write(ma35d1_ehci->sysreg, REG_SYS_USBPMISCR, 0x20002);
 
 	/* set UHOVRCURH(SYS_MISCFCR0[12]) 1 => USBH Host over-current detect is high-active */

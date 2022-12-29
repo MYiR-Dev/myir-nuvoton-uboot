@@ -70,6 +70,7 @@
 #define SPI_SS_HIGH     0x00000004
 #define SPI_QUAD_EN     0x400000
 #define SPI_DIR_2QM     0x100000
+#define DWIDTH_MASK     0x1F00
 
 #define QSPI_IFR_WIDTH_SINGLE_BIT_SPI   (0 << 0)
 #define QSPI_IFR_WIDTH_DUAL_OUTPUT      (1 << 0)
@@ -149,6 +150,13 @@ static bool ma35d1_qspi_supports_op(struct spi_slave *slave,
 	return true;
 }
 
+static __inline u32 EndianSwap(u32 org_val)
+{
+        u32 val;
+        val = ((org_val & 0xFF) << 24) | ((org_val & 0xFF000000) >> 24) | ((org_val & 0xFF00) << 8) | ((org_val & 0xFF0000) >> 8);
+        return val;
+}
+
 static int ma35d1_qspi_exec_op(struct spi_slave *slave,
                                 const struct spi_mem_op *op)
 {
@@ -209,11 +217,23 @@ static int ma35d1_qspi_exec_op(struct spi_slave *slave,
 				ma35d1_qspi_write(ma35d1_qspi_read(nq, CTL) | SPI_QUAD_EN, nq, CTL);
 			}
 
-			for (i = 0; i < op->data.nbytes; i++) {
-				while ((ma35d1_qspi_read(nq, STATUS) & TXFULL)); //TXFULL
-				ma35d1_qspi_write(0, nq, TX);
-				while ((ma35d1_qspi_read(nq, STATUS) & RXEMPTY)); //RXEMPTY
-				*rx++ = (unsigned char)ma35d1_qspi_read(nq, RX);
+			if ((op->cmd.opcode == QUAD_READ_0x6B) && ((op->data.nbytes % 4) == 0)) {
+				/* Set DWIDTH to 32 bits */
+				ma35d1_qspi_write(ma35d1_qspi_read(nq, CTL) & ~(DWIDTH_MASK), nq, CTL);
+				for (i = 0; i < op->data.nbytes; i += 4) {
+					while ((ma35d1_qspi_read(nq, STATUS) & TXFULL)); //TXFULL
+					ma35d1_qspi_write(0, nq, TX);
+					while ((ma35d1_qspi_read(nq, STATUS) & RXEMPTY)); //RXEMPTY
+					*(unsigned int*)rx = (unsigned int)EndianSwap(ma35d1_qspi_read(nq, RX));
+					rx += 4;
+				}
+			} else {
+				for (i = 0; i < op->data.nbytes; i++) {
+					while ((ma35d1_qspi_read(nq, STATUS) & TXFULL)); //TXFULL
+					ma35d1_qspi_write(0, nq, TX);
+					while ((ma35d1_qspi_read(nq, STATUS) & RXEMPTY)); //RXEMPTY
+					*rx++ = (unsigned char)ma35d1_qspi_read(nq, RX);
+				}
 			}
 		}
 	}
@@ -221,7 +241,7 @@ static int ma35d1_qspi_exec_op(struct spi_slave *slave,
 	while (ma35d1_qspi_read(nq, STATUS) & SPI_BUSY);
 
 	/* Restore to 1-bit mode */
-	ma35d1_qspi_write(ma35d1_qspi_read(nq, CTL) & ~(SPI_QUAD_EN | SPI_DIR_2QM), nq, CTL);
+	ma35d1_qspi_write(ma35d1_qspi_read(nq, CTL) & ~(SPI_QUAD_EN | SPI_DIR_2QM | DWIDTH_MASK) | 0x800, nq, CTL);
 
 	/* Deactiveate SS */
 	ma35d1_qspi_write(ma35d1_qspi_read(nq, SSCTL) & ~SELECTSLAVE0, nq, SSCTL);
@@ -264,8 +284,8 @@ static int ma35d1_qspi_init(struct ma35d1_qspi *nq)
 	reset_deassert(&nq->rst);
 	udelay(1000);
 
-	/* Initialize data width to 8 bit */
-	ma35d1_qspi_write((ma35d1_qspi_read(nq, CTL) & ~0x1F00) | 0x800, nq, CTL);
+	/* Initialize data width to 8 bit, suspend interval to 0 */
+	ma35d1_qspi_write((ma35d1_qspi_read(nq, CTL) & ~0x1FF0) | 0x800, nq, CTL);
 
 	/* Enable the QSPI controller */
 	ma35d1_qspi_write((ma35d1_qspi_read(nq, CTL) | SPIEN), nq, CTL);

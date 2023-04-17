@@ -39,11 +39,11 @@ static int ehci_ma35d1_probe(struct udevice *dev)
 {
 	struct ma35d1_ehci_priv *ma35d1_ehci = dev_get_priv(dev);
 	struct ofnode_phandle_args args;
-	u32		regval;
-	fdt_addr_t	hcd_base;
+	fdt_addr_t hcd_base;
 	struct ehci_hccr *hccr;
 	struct ehci_hcor *hcor;
-	int		ret;
+	u32 reg, timeout = (500 / 20);
+	int ret;
 
 	/*
 	 *  enable clock
@@ -76,13 +76,21 @@ static int ehci_ma35d1_probe(struct udevice *dev)
 	}
 
 	/* USBPMISCR; HSUSBH0 & HSUSBH1 PHY */
-	regmap_write(ma35d1_ehci->sysreg, REG_SYS_USBPMISCR, 0x10001);
-	regmap_write(ma35d1_ehci->sysreg, REG_SYS_USBPMISCR, 0x20002);
+	regmap_read(ma35d1_ehci->sysreg, REG_SYS_USBPMISCR, &reg);
+	if ((reg & 0x20302) != 0x20302) {
+		reg = (reg & ~0x30003) | 0x20002;
+		regmap_write(ma35d1_ehci->sysreg, REG_SYS_USBPMISCR, reg);
+		do {
+			mdelay(20);
+			regmap_read(ma35d1_ehci->sysreg, REG_SYS_USBPMISCR, &reg);
+		} while (((reg & 0x20302) != 0x20302) && (timeout-- > 0));
+	}
+	dev_dbg(&pdev->dev, "REG_SYS_USBPMISCR = 0x%x, timeout = %d\n", reg, timeout);
 
 	/* set UHOVRCURH(SYS_MISCFCR0[12]) 1 => USBH Host over-current detect is high-active */
 	/*                                 0 => USBH Host over-current detect is low-active  */
-	regmap_read(ma35d1_ehci->sysreg, REG_SYS_MISCFCR0, &regval);
-	regmap_write(ma35d1_ehci->sysreg, REG_SYS_MISCFCR0, (regval & ~(1 << 12)));
+	regmap_read(ma35d1_ehci->sysreg, REG_SYS_MISCFCR0, &reg);
+	regmap_write(ma35d1_ehci->sysreg, REG_SYS_MISCFCR0, (reg & ~(1 << 12)));
 
 	/*
 	 * Get the base address for EHCI controller from the device node
@@ -100,6 +108,12 @@ static int ehci_ma35d1_probe(struct udevice *dev)
 	return ehci_register(dev, hccr, hcor, NULL, 0, USB_INIT_HOST);
 }
 
+int ehci_ma35d1_deregister(struct udevice *dev)
+{
+	/* we cannot shutdown ehci phy, that will cause ohci halt */
+	return 0;
+}
+
 static const struct udevice_id ehci_ma35d1_ids[] = {
 	{ .compatible = "nuvoton,ma35d1-ehci0" },
 	{ .compatible = "nuvoton,ma35d1-ehci1" },
@@ -111,7 +125,7 @@ U_BOOT_DRIVER(usb_ehci) = {
 	.id	= UCLASS_USB,
 	.of_match = ehci_ma35d1_ids,
 	.probe = ehci_ma35d1_probe,
-	.remove = ehci_deregister,
+	.remove = ehci_ma35d1_deregister,
 	.ops	= &ehci_usb_ops,
 	.platdata_auto_alloc_size = sizeof(struct usb_platdata),
 	.priv_auto_alloc_size = sizeof(struct ma35d1_ehci_priv),

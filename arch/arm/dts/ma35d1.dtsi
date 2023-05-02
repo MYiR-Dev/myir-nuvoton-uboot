@@ -771,7 +771,7 @@
 		nuvoton,clk = <&clk>;
 		clocks = <&clk dcu_gate>;
 		resets = <&reset MA35D1_RESET_DISP>;
-		status = "okay";
+		status = "disabled";
 	};
 
 };

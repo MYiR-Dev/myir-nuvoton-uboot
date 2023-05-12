@@ -178,7 +178,7 @@ static int  ma35d1_i2c_read(struct udevice *dev, uchar chip, u8 *addr,int alen, 
 	i2c_device.g_u32AddressLength = alen; // address length
 
 	for(i = 0; i < alen; i++)
-		i2c_device.g_au8TxData[i] = (uint8_t)(addr[alen - i]);
+		i2c_device.g_au8TxData[i] = (uint8_t)(addr[alen - i - 1]);
 
 	regs->CTL0 = (regs->CTL0 &~ I2C_CTL_ALL) | I2C_CTL_STA;
 
@@ -231,7 +231,7 @@ static int  ma35d1_i2c_write(struct udevice *dev, uchar chip, u8 *addr,int alen,
 	}
 
 	for(i = 0; i < alen; i++)
-		i2c_device.g_au8TxData[i] = (uint8_t)(addr[alen - i]);
+		i2c_device.g_au8TxData[i] = (uint8_t)(addr[alen - i - 1]);
 
 	for(i = alen; i < alen+len; i++)
 		i2c_device.g_au8TxData[i] = (uint8_t)(buffer[i]);

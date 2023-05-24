@@ -92,6 +92,7 @@ struct ma35d1_lcd_info {
 	u32 vsync_len;
 	u32 format;
 	u32  bpp;
+	u32 swizzle;
 };
 
 struct ma35d1_fb_priv {
@@ -236,11 +237,12 @@ static void ma35d1_disp_register_init(struct ma35d1_lcd_info *disp_info,
 	data = disp_info->x_res*(disp_info->bpp >> 3);
 	writel(data, regs+dcregFrameBufferStride0);
 
-	data = (disp_info->format << FRAMEBUFFER_FORMAT_POS) | YUV_709_BT709 | RESET_ENABLE | OUTPUT_ENABLE;
+	data = (disp_info->format << FRAMEBUFFER_FORMAT_POS) | (disp_info->swizzle << 23) | YUV_709_BT709 | RESET_ENABLE | OUTPUT_ENABLE;
 	writel(data, regs+dcregFrameBufferConfig0);
 
 	// Set frame buffer address registers
 	writel(disp_info->fb_base, regs+dcregFrameBufferAddress0);
+	debug("\tFrameBufferAddress0: 0x%x, 0x%x\n", disp_info->fb_base, readl(regs+dcregFrameBufferAddress0));
 }
 
 static int ma35d1_fb_video_probe(struct udevice *dev)
@@ -254,7 +256,7 @@ static int ma35d1_fb_video_probe(struct udevice *dev)
 	ofnode node;
 	struct display_timing timings;
 	struct ma35d1_lcd_info disp_info;
-	u32 pix_fmt;
+	u32 pix_fmt, pix_swizzle;
 	int ret;
 
 	priv->regs = (void *)dev_read_addr(dev);
@@ -299,7 +301,12 @@ static int ma35d1_fb_video_probe(struct udevice *dev)
 		dev_err(dev, "Failed to read bpp, pixel_fmt and buswidth from DT\n");
 		return ret;
 	}
-
+	ret = ofnode_read_u32(node, "swizzle", &pix_swizzle);
+	if (ret) {
+		dev_err(dev, "Failed to read swizzle from DT\n");
+		return ret;
+	}
+	disp_info.swizzle = pix_swizzle;
 	disp_info.format = pix_fmt;
 	if (pix_fmt == 4) { // R5G6B5
 		uc_priv->bpix = VIDEO_BPP16;
@@ -348,6 +355,7 @@ static int ma35d1_fb_video_probe(struct udevice *dev)
 	priv->pixclock.rate *= 2;
 	priv->pixclock.rate = ma35d1_fb_cal_pixel_clk_rate(24000000,
 	                      priv->pixclock.rate, u32Reg);
+	debug("\tPixel Clock@%ldHz VPLL:0x%08x, 0x%08x\n", priv->pixclock.rate, u32Reg[0], u32Reg[1]);
 
 	regmap_sys = syscon_regmap_lookup_by_phandle(dev,"nuvoton,sys");
 	CLK_UnLockReg(regmap_sys);

@@ -22,7 +22,7 @@ DECLARE_GLOBAL_DATA_PTR;
 enum {
 	/* Maximum LCD size we support */
 	LCD_MAX_WIDTH		= 1920,
-	LCD_MAX_HEIGHT		= 1080,
+	LCD_MAX_HEIGHT		= 1200,
 };
 
 #define dcregFrameBufferConfig0			0x1518

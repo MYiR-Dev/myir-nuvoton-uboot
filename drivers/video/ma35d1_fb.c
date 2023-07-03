@@ -51,7 +51,7 @@ enum {
 #define YUV_2020_BT2020				(0x3 << 14)
 #define FRAMEBUFFER_FORMAT_POS			(26)
 
-#define DPI_DATA_FORMAT_D24			(0x5)
+//#define DPI_DATA_FORMAT_D24			(0x5)
 #define HSYNC_TOTAL_POS				16
 #define VSYNC_TOTAL_POS				16
 #define HSYNC_PULSE_END_POS			15
@@ -93,6 +93,7 @@ struct ma35d1_lcd_info {
 	u32 format;
 	u32  bpp;
 	u32 swizzle;
+	u32 dpiconfig;
 };
 
 struct ma35d1_fb_priv {
@@ -103,6 +104,8 @@ struct ma35d1_fb_priv {
 	struct clk dcuclk;
 	struct clk pixclock;
 };
+
+u32 gu32_dpiConfig;
 
 #define REG_SYS_RLKTZNS 0x1A4
 static void CLK_UnLockReg(struct regmap *regmap)
@@ -224,7 +227,8 @@ static void ma35d1_disp_register_init(struct ma35d1_lcd_info *disp_info,
 	data = VSYNC_PULSE_POLARITY_POS | VSYNC_PULSE_ENABLE | (vsync_end << VSYNC_PULSE_END_POS) | (vsync_start);
 	writel(data, regs+dcregVSync0);
 
-	writel(DPI_DATA_FORMAT_D24, regs+dcregDpiConfig0);
+	//writel(DPI_DATA_FORMAT_D24, regs+dcregDpiConfig0);
+	writel(gu32_dpiConfig/*DPI_DATA_FORMAT_D24*/, regs+dcregDpiConfig0);
 
 	data = PANELCONFIG_DE_DATA_ENABLE | PANELCONFIG_DE_POLARITY_POS |
 		PANELCONFIG_DATA_ENABLE | PANELCONFIG_DATA_POLARITY_POS |
@@ -321,6 +325,13 @@ static int ma35d1_fb_video_probe(struct udevice *dev)
 		printf("%s: invalid format: %d\n", __func__, pix_fmt);
 		return -EINVAL;
 	}
+
+	ret = ofnode_read_u32(node, "dpi-config", &gu32_dpiConfig);
+	if (ret) {
+		dev_err(dev, "Failed to read dpi-config from DT\n");
+		return ret;
+	}
+	disp_info.dpiconfig = gu32_dpiConfig;
 
 	uc_priv->xsize = disp_info.x_res;
 	uc_priv->ysize = disp_info.y_res;

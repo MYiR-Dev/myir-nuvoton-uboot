@@ -366,7 +366,7 @@ static int ma35d1_fb_video_probe(struct udevice *dev)
 	priv->pixclock.rate *= 2;
 	priv->pixclock.rate = ma35d1_fb_cal_pixel_clk_rate(24000000,
 	                      priv->pixclock.rate, u32Reg);
-	debug("\tPixel Clock@%ldHz VPLL:0x%08x, 0x%08x\n", priv->pixclock.rate, u32Reg[0], u32Reg[1]);
+	debug("\tPixel Clock@%lldHz VPLL:0x%08x, 0x%08x\n", priv->pixclock.rate, u32Reg[0], u32Reg[1]);
 
 	regmap_sys = syscon_regmap_lookup_by_phandle(dev,"nuvoton,sys");
 	CLK_UnLockReg(regmap_sys);

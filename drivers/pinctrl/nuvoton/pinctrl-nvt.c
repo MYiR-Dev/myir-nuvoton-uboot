@@ -90,7 +90,7 @@ static int nvt_set_drive_perpin(struct nvt_pinctrl_priv *priv,
 {
 
 	int port_num, group_num;
-	unsigned long value, u_value;
+	unsigned long value;
 	void __iomem *base;
 	struct nvt_pin_ctrl *ctrl = priv->ctrl;
 

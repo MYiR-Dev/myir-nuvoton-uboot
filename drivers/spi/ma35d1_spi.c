@@ -241,7 +241,7 @@ static int ma35d1_qspi_exec_op(struct spi_slave *slave,
 	while (ma35d1_qspi_read(nq, STATUS) & SPI_BUSY);
 
 	/* Restore to 1-bit mode */
-	ma35d1_qspi_write(ma35d1_qspi_read(nq, CTL) & ~(SPI_QUAD_EN | SPI_DIR_2QM | DWIDTH_MASK) | 0x800, nq, CTL);
+	ma35d1_qspi_write((ma35d1_qspi_read(nq, CTL) & ~(SPI_QUAD_EN | SPI_DIR_2QM | DWIDTH_MASK)) | 0x800, nq, CTL);
 
 	/* Deactiveate SS */
 	ma35d1_qspi_write(ma35d1_qspi_read(nq, SSCTL) & ~SELECTSLAVE0, nq, SSCTL);

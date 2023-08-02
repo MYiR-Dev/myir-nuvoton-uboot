@@ -97,6 +97,21 @@
 	#devtypel #instance " "
 
 
+#define SPINORARGS \
+        "spinorboot=" \
+                "echo \"Booting from spinor ... ...\"; " \
+                "setenv bootargs noinitrd ${spinor_bootargs} rw rootwait=1 console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem}; " \
+                "run spinor_boot; " \
+                "booti ${kernel_addr_r} - ${fdt_addr_r};\0"
+
+#define BOOTENV_DEV_SPINOR(devtypeu, devtypel, instance) \
+        "bootcmd_" #devtypel #instance "=" \
+        "run spinorboot\0"
+
+#define BOOTENV_DEV_NAME_SPINOR(devtypeu, devtypel, instance) \
+        #devtypel #instance " "
+
+
 #ifdef CONFIG_CMD_MMC
 #define BOOT_TARGET_MMC0(func)  func(MMC, mmc, 0)
 #define BOOT_TARGET_MMC1(func)  func(MMC, mmc, 1)
@@ -125,6 +140,13 @@
 #define BOOT_TARGET_SPINAND(func)
 #endif
 
+#ifdef CONFIG_SPI_FLASH_MTD
+#define BOOT_TARGET_SPINOR(func) func(SPINOR, spinor, 0)
+#else
+#define BOOT_TARGET_SPINOR(func)
+#endif
+
+
 #define BOOT_TARGET_DEVICES(func) \
 		BOOT_TARGET_MMC0(func) \
 		BOOT_TARGET_MMC1(func) \
@@ -132,6 +154,7 @@
 		BOOT_TARGET_LEGACY_MMC(func) \
 		BOOT_TARGET_NAND(func) \
 		BOOT_TARGET_SPINAND(func) \
+		BOOT_TARGET_SPINOR(func)
 
 #include <config_distro_bootcmd.h>
 
@@ -151,9 +174,12 @@
 	"mmc_block=mmcblk1p1\0" \
 	"spinand_ubiblock=9\0" \
         "nand_ubiblock=4\0" \
+	"spinor_bootargs=root=/dev/mtdblock2 rootfstype=jffs2\0" \
+	"spinor_boot=sf probe 0 18000000; sf read ${kernel_addr_r} kernel; sf read ${fdt_addr_r} device-tree;\0" \
 	MMCARGS \
 	NANDARGS \
 	SPINANDARGS \
+	SPINORARGS \
 	BOOTENV
 
 #endif

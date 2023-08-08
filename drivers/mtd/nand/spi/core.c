@@ -19,6 +19,7 @@
 #include <linux/slab.h>
 #include <linux/spi/spi.h>
 #include <linux/spi/spi-mem.h>
+#include <linux/delay.h>
 #else
 #include <common.h>
 #include <errno.h>
@@ -29,6 +30,7 @@
 #include <linux/bitops.h>
 #include <linux/bug.h>
 #include <linux/mtd/spinand.h>
+#include <linux/delay.h>
 #endif
 
 /* SPI NAND index visible in MTD names */
@@ -996,6 +998,8 @@ static int spinand_detect(struct spinand_device *spinand)
 	ret = spinand_reset_op(spinand);
 	if (ret)
 		return ret;
+
+	udelay(1000);
 
 	ret = spinand_read_id_op(spinand, spinand->id.data);
 	if (ret)

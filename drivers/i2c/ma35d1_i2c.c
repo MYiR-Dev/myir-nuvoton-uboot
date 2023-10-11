@@ -274,8 +274,8 @@ static int ma35d1_i2c_set_bus_speed(struct udevice *dev, unsigned int sp)
 		return -EINVAL;
 
 	/* assume speed above 1000 are Hz-specified */
-	if(sp > 1000) sp = sp/1000;
-	if(sp > 400) sp = 400;
+	if(sp > 400000) sp = 400000;
+	if(sp > 100000) sp = 100000;
 
 	u32Div = (uint32_t)(((clk_rate * 10U) / (sp * 4U) + 5U) / 10U - 1U); /* Compute proper divider for I2C clock */
 

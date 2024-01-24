@@ -48,7 +48,7 @@
 
 #define MMCARGS \
 	"mmcboot=" \
-	"if mmc dev 0; then " \
+	"if mmc dev 1; then " \
 		"echo \"Booting form mmc ... ...\"; " \
 		"setenv bootargs root=/dev/${mmc_block} rootfstype=ext4 rw rootwait console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem}; " \
 		"mmc read ${kernel_addr_r} 0x1800 0x8000; " \
@@ -152,9 +152,7 @@
 		BOOT_TARGET_MMC1(func) \
 		BOOT_TARGET_UBIFS(func) \
 		BOOT_TARGET_LEGACY_MMC(func) \
-		BOOT_TARGET_NAND(func) \
-		BOOT_TARGET_SPINAND(func) \
-		BOOT_TARGET_SPINOR(func)
+		BOOT_TARGET_SPINAND(func)
 
 #include <config_distro_bootcmd.h>
 
@@ -172,14 +170,12 @@
 	"bootubivol=rootfs\0" \
 	"kernelmem=256M\0" \
 	"mmc_block=mmcblk1p1\0" \
-	"spinand_ubiblock=9\0" \
+	"spinand_ubiblock=4\0" \
         "nand_ubiblock=4\0" \
 	"spinor_bootargs=root=/dev/mtdblock2 rootfstype=jffs2\0" \
 	"spinor_boot=sf probe 0 18000000; sf read ${kernel_addr_r} kernel; sf read ${fdt_addr_r} device-tree;\0" \
 	MMCARGS \
-	NANDARGS \
 	SPINANDARGS \
-	SPINORARGS \
 	BOOTENV
 
 #endif

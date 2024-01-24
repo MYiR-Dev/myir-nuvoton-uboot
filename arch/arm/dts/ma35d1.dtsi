@@ -720,8 +720,8 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			eth_phy0: ethernet-phy@1 {
-				reg = <1>;
+			eth_phy0: ethernet-phy@4 {
+				reg = <4>;
 			};
 		};
 	};
@@ -744,8 +744,8 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			eth_phy1: ethernet-phy@1 {
-				reg = <1>;
+			eth_phy1: ethernet-phy@6 {
+				reg = <6>;
 			};
 		};
 	};

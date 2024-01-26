@@ -168,7 +168,7 @@
 	"ramdisk_addr_r=0x85030000\0" \
 	"bootubipart=rootfs\0" \
 	"bootubivol=rootfs\0" \
-	"kernelmem=256M\0" \
+	"kernelmem=248M\0" \
 	"mmc_block=mmcblk1p1\0" \
 	"spinand_ubiblock=4\0" \
         "nand_ubiblock=4\0" \

@@ -43,14 +43,14 @@
 };
 
 &display {
-	status = "disabled";
+	status = "okay";
 	/* RGB interface */
 	swizzle = <0>;      /* 0:ARGB, 1:RGBA, 2:ABGR, 3:BGRA */
-	pixel-fmt = <6>;    /* RGB888 *.
+	pixel-fmt = <6>;    /* RGB888 */
 	dpi-config = <5>;   /* 0:D16CFG1, 1:D16CFG2, 2:D16CFG3, 3:D18CFG1, 4:D18CFG2, 5:D24 */
 
 	display-timings {
-		native-mode = <&timing0>;
+		native-mode = <&timing1>;
 
 		timing0: 1024x600 {
 			clock-frequency = <51000000>;//pixel clock(pixclock)
@@ -64,8 +64,20 @@
 			vback-porch = <12>;
 		};
 
+		// timing1: 800x480 {
+		// 	clock-frequency = <45000000>;
+		// 	hactive = <800>;
+		// 	vactive = <480>;
+		// 	hsync-len = <1>;
+		// 	hfront-porch = <210>;
+		// 	hback-porch = <46>;
+		// 	vsync-len = <1>;
+		// 	vfront-porch  = <22>;
+		// 	vback-porch = <23>;
+		// };
+
 		timing1: 800x480 {
-			clock-frequency = <45000000>;
+			clock-frequency = <33000000>;
 			hactive = <800>;
 			vactive = <480>;
 			hsync-len = <1>;
@@ -74,6 +86,8 @@
 			vsync-len = <1>;
 			vfront-porch  = <22>;
 			vback-porch = <23>;
+			hsync-active = <1>;
+			vsync-active = <1>;
 		};
 
 		timing2: 1920x1080 {

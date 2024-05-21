@@ -43,7 +43,7 @@
 };
 
 &display {
-	status = "okay";
+	status = "disabled";
 	//RGB interface
 	// swizzle = <2>;//0:ARGB, 1:RGBA, 2:ABGR, 3:BGRA
 	swizzle = <0>;

@@ -1,3 +1,11 @@
+config PINCTRL_LMA35
+        bool "MYiR MYD-LMX35 pin control drivers"
+        depends on PINCTRL_GENERIC
+        depends on LMA35
+        default y
+        help
+          Enable support pin control functions for NVT SoCs.
+
 config PINCTRL_MA35D1
 	bool "NUVOTON MA35D1 pin control drivers"
 	depends on PINCTRL_GENERIC

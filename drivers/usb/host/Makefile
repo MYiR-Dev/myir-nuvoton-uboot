@@ -11,6 +11,7 @@ endif
 # ohci
 obj-$(CONFIG_USB_OHCI_HCD) += ohci-hcd.o
 obj-$(CONFIG_USB_OHCI_MA35D1) += ohci-ma35d1.o
+obj-$(CONFIG_USB_OHCI_LMA35) += ohci-ma35d1.o
 obj-$(CONFIG_USB_OHCI_MA35H0) += ohci-ma35h0.o
 obj-$(CONFIG_USB_OHCI_MA35D0) += ohci-ma35d0.o
 obj-$(CONFIG_USB_ATMEL) += ohci-at91.o
@@ -27,6 +28,7 @@ obj-$(CONFIG_USB_EHCI_MA35H0) += ehci-ma35h0.o
 obj-$(CONFIG_USB_EHCI_MA35D0) += ehci-ma35d0.o
 obj-$(CONFIG_USB_EHCI_HCD) += ehci-hcd.o
 obj-$(CONFIG_USB_EHCI_MA35D1) += ehci-ma35d1.o
+obj-$(CONFIG_USB_EHCI_LMA35) += ehci-ma35d1.o
 obj-$(CONFIG_USB_EHCI_ARMADA100) += ehci-armada100.o utmi-armada100.o
 obj-$(CONFIG_USB_EHCI_ATMEL) += ehci-atmel.o
 obj-$(CONFIG_USB_EHCI_FSL) += ehci-fsl.o

@@ -846,6 +846,15 @@ config MTK_SERIAL
 	  The High-speed UART is compatible with the ns16550a UART and have
 	  its own high-speed registers.
 
+config LMA35_SERIAL
+        bool "MYiR MYD-LMA35 UART support"
+        depends on LMA35
+        default y
+        help
+          Select this to enable UART support for LMA35 UART
+          devices. This driver uses driver model and requires a device
+          tree binding to operate.
+
 config NUVOTON_SERIAL
 	bool "Nuvoton MA35D1 UART support"
 	depends on MA35D1

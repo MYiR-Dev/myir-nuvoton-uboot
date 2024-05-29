@@ -1,5 +1,13 @@
 menu "Hardware crypto devices"
 
+config LMA35_CRYPTO
+        bool "MYiR MYD-LMA35 cryptographic accelerator."
+        depends on LMA35
+        default y
+        help
+          Enables support for the on-chip cryptographic accelerator on MA35D1.
+
+
 config MA35D1_CRYPTO
 	bool "Nuvoton MA35D1 cryptographic accelerator."
 	depends on MA35D1

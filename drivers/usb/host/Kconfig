@@ -117,6 +117,13 @@ config USB_EHCI_HCD
 
 if USB_EHCI_HCD
 
+config USB_EHCI_LMA35
+        bool "Support for MYiR MYD-LMA35 on-chip EHCI USB controller"
+        depends on LMA35
+        default y
+        ---help---
+          Enables support for the on-chip EHCI controller on MA35D1.
+
 config USB_EHCI_MA35D1
 	bool "Support for Nuvoton MA35D1 on-chip EHCI USB controller"
 	depends on MA35D1
@@ -279,6 +286,13 @@ config USB_OHCI_GENERIC
 	select USB_HOST
 	---help---
 	  Enables support for generic OHCI controller.
+
+config USB_OHCI_LMA35
+        bool "Support for MYIR MYD-LMA35 on-chip OHCI USB controller"
+        depends on LMA35
+        default y
+        ---help---
+          Enables support for the on-chip OHCI controller on MA35D1.
 
 config USB_OHCI_MA35D1
 	bool "Support for Nuvoton MA35D1 on-chip OHCI USB controller"

@@ -1,0 +1,12 @@
+if LMA35
+
+config SYS_BOARD
+	default "myd-lma35"
+
+config SYS_VENDOR
+	default "myir"
+
+config SYS_CONFIG_NAME
+	default "myd-lma35"
+
+endif

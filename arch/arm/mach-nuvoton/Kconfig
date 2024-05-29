@@ -1,10 +1,20 @@
 if ARCH_NUVOTON
 
 config SYS_SOC
-	default "nuvoton"
+	default "myir"
 
 config SYS_VENDOR
-	default "nuvoton"
+	default "myir"
+
+config LMA35
+        select ARM64
+        select DM
+        select DM_ETH
+        bool "MYD LMA35"
+        default n
+
+source "arch/arm/mach-nuvoton/lma35/Kconfig"
+source "board/myir/myd-lma35/Kconfig"
 
 config MA35D1
 	select ARM64

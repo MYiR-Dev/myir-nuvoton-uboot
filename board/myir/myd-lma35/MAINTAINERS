@@ -1,0 +1,5 @@
+myd-lma35
+S:	Maintained
+F:	board/myir/myd-lma35
+F:	include/configs/myd-lma35.h
+F:	configs/myd_lma35_defconfig

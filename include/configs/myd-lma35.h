@@ -159,6 +159,7 @@
 /* Extra environment variables */
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"bootfile=Image\0" \
+	"bootdelay=0\0" \
 	"kernel_addr_r=0x80080000\0" \
 	"fdt_addr_r=0x85000000\0" \
 	"bmp_addr_r=0x8D200000\0" \

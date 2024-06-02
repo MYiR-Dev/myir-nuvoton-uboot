@@ -16,6 +16,7 @@
 
 #define CONFIG_SYS_MALLOC_LEN			SZ_2M
 #define CONFIG_SYS_BOOTM_LEN			SZ_64M
+#define CONFIG_SYS_CBSIZE 			2048
 
 /* Uboot definition */
 #define CONFIG_SYS_INIT_SP_ADDR		(CONFIG_SYS_TEXT_BASE + \

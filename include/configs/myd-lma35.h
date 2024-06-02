@@ -24,7 +24,7 @@
 						GENERATED_GBL_DATA_SIZE)
 
 
-#define CONFIG_SYS_MMC_ENV_DEV 0
+#define CONFIG_SYS_MMC_ENV_DEV 1
 
 #define CONFIG_ETHPRIME			"eth0"
 
@@ -49,13 +49,19 @@
 
 #define MMCARGS \
 	"mmcboot=" \
-	"if mmc dev 0; then " \
+	"if mmc dev ${devnum}; then " \
 		"echo \"Booting form mmc ... ...\"; " \
 		"setenv bootargs root=/dev/${mmc_block} rootfstype=ext4 rw rootwait console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem}; " \
 		"mmc read ${kernel_addr_r} 0x1800 0x8000; " \
 		"mmc read ${fdt_addr_r} 0x1600 0x80; " \
 		"booti ${kernel_addr_r} - ${fdt_addr_r}; " \
 	"fi;\0"
+
+#define BOOTENV_DEV_BLKDEV(devtypeu, devtypel, instance) \
+        "bootcmd_" #devtypel #instance "=" \
+        "setenv devnum " #instance "; " \
+        "setenv mmc_block mmcblk" #instance "p1; " \
+        "run " #devtypel "boot\0"
 
 #define BOOTENV_DEV_LEGACY_MMC(devtypeu, devtypel, instance) \
         "bootcmd_" #devtypel #instance "=" \
@@ -171,6 +177,7 @@
 	"bootubipart=rootfs\0" \
 	"bootubivol=rootfs\0" \
 	"kernelmem=248M\0" \
+	"mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
 	"mmc_block=mmcblk1p1\0" \
 	"spinand_ubiblock=4\0" \
         "nand_ubiblock=4\0" \

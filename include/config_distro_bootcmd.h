@@ -35,10 +35,11 @@
 	#devtypel "_boot=" \
 	BOOTENV_SHARED_BLKDEV_BODY(devtypel)
 
-#define BOOTENV_DEV_BLKDEV(devtypeu, devtypel, instance) \
+/*#define BOOTENV_DEV_BLKDEV(devtypeu, devtypel, instance) \
 	"bootcmd_" #devtypel #instance "=" \
 		"devnum=" #instance "; " \
-		"run " #devtypel "_boot\0"
+		"run " #devtypel "boot\0"
+*/
 
 #define BOOTENV_DEV_NAME_BLKDEV(devtypeu, devtypel, instance) \
 	#devtypel #instance " "

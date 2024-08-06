@@ -5,7 +5,7 @@
  */
 
 /dts-v1/;
-#include "ma35d1.dtsi"
+#include "myd-lma35.dtsi"
 
 / {
 	model = "Nuvoton MA35D1 U-boot";

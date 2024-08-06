@@ -91,7 +91,7 @@
 	"if test ${mtdids} = 'spi-nand0=spi-nand0' ; then " \
 		"echo \"Booting from spinand ... ...\"; " \
 		"mtd list; " \
-		"setenv bootargs noinitrd ubi.mtd=${spinand_ubiblock} root=ubi0:rootfs rootfstype=ubifs rw rootwait=1 console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem}; " \
+		"setenv bootargs noinitrd ubi.mtd=${spinand_ubiblock} root=ubi0:rootfs rootfstype=ubifs rw rootwait=1 console=ttyS0,115200n8 rdinit=/sbin/init mem=${kernelmem} loglevel=1; " \
 		"mtd read kernel ${kernel_addr_r}; " \
 		"mtd read device-tree ${fdt_addr_r}; " \
 		"booti ${kernel_addr_r} - ${fdt_addr_r}; " \

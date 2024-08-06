@@ -13,6 +13,15 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+int user_led(void)
+{
+	unsigned int gpio_led=191;
+	gpio_request(gpio_led, "user_led");
+
+	gpio_direction_output(gpio_led, 0);
+
+	gpio_set_value(gpio_led, 0);
+}
 int board_late_init(void)
 {
 	unsigned int gpio_net0=94,gpio_net1=181;
@@ -36,6 +45,8 @@ int board_late_init(void)
 
 	gpio_free(gpio_net0);
 	gpio_free(gpio_net1);
+
+	user_led();
 	return 0;
 }
 

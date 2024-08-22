@@ -22,6 +22,18 @@ int user_led(void)
 
 	gpio_set_value(gpio_led, 0);
 }
+
+int rgb_backlight(void)
+{
+        unsigned int gpio_lcd_bl=168;
+        gpio_request(gpio_lcd_bl, "rgb_backlight");
+
+        gpio_direction_output(gpio_lcd_bl, 0);
+
+        gpio_set_value(gpio_lcd_bl, 0);
+}
+
+
 int board_late_init(void)
 {
 	unsigned int gpio_net0=94,gpio_net1=181;
@@ -47,6 +59,7 @@ int board_late_init(void)
 	gpio_free(gpio_net1);
 
 	user_led();
+	rgb_backlight();
 	return 0;
 }
 

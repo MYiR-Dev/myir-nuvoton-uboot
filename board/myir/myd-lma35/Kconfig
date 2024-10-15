@@ -3,6 +3,12 @@ if LMA35
 config SYS_BOARD
 	default "myd-lma35"
 
+config DDRSIZE_256
+	bool "kernelmem 256"
+
+config DDRSIZE_512
+	bool "kernelmem 512"
+
 config SYS_VENDOR
 	default "myir"
 

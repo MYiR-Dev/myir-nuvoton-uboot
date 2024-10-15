@@ -164,6 +164,7 @@
 #include <config_distro_bootcmd.h>
 
 /* Extra environment variables */
+#ifdef CONFIG_DDRSIZE_256
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"bootfile=Image\0" \
 	"bootdelay=0\0" \
@@ -186,5 +187,27 @@
 	MMCARGS \
 	SPINANDARGS \
 	BOOTENV
+#elif CONFIG_DDRSIZE_512
+#define CONFIG_EXTRA_ENV_SETTINGS \
+	"bootfile=Image\0" \
+	"kernel_addr_r=0x80080000\0" \
+	"fdt_addr_r=0x85000000\0" \
+	"bmp_addr_r=0x8D200000\0" \
+	"loadaddr=0x81000000\0" \
+	"scriptaddr=0x85010000\0" \
+	"pxefile_addr_r=0x85020000\0" \
+	"ramdisk_addr_r=0x85030000\0" \
+	"bootubipart=rootfs\0" \
+	"bootubivol=rootfs\0" \
+	"kernelmem=504M\0" \
+	"mmc_block=mmcblk1p1\0" \
+	"spinand_ubiblock=4\0" \
+        "nand_ubiblock=4\0" \
+	"spinor_bootargs=root=/dev/mtdblock2 rootfstype=jffs2\0" \
+	"spinor_boot=sf probe 0 18000000; sf read ${kernel_addr_r} kernel; sf read ${fdt_addr_r} device-tree;\0" \
+	MMCARGS \
+	SPINANDARGS \
+	BOOTENV
+#endif
 
 #endif
